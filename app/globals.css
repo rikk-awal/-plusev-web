@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: #004540; /* PlusEV Deep Green */
+  --color-secondary: #FFE175; /* PlusEV Accent Yellow */
+  --color-cream: #FDFBF7;
+}
+
+:root {
+  --background: #FDFBF7;
+  --foreground: #1a1a1a;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-7xl;
+  }
+}
