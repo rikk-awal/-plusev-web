@@ -1,26 +1,146 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@theme {
+@custom-variant dark (&:is(.dark *));
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #004540; /* PlusEV Deep Green */
-  --color-secondary: #FFE175; /* PlusEV Accent Yellow */
-  --color-cream: #FDFBF7;
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-jetbrains-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - var(--gap))); }
+  }
+  @keyframes marquee-vertical {
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(-100% - var(--gap))); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  --animate-marquee: marquee var(--duration, 40s) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear infinite;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
 }
 
 :root {
-  --background: #FDFBF7;
-  --foreground: #1a1a1a;
+  --background: #0d0f2a;
+  --foreground: #e2e8f0;
+  --card: #0d1117;
+  --card-foreground: #e2e8f0;
+  --popover: #0d1117;
+  --popover-foreground: #e2e8f0;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f59e0b;
+  --secondary-foreground: #06090f;
+  --muted: #1e293b;
+  --muted-foreground: #64748b;
+  --accent: #f59e0b;
+  --accent-foreground: #06090f;
+  --destructive: oklch(0.58 0.22 27);
+  --border: rgba(255, 255, 255, 0.07);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #2563eb;
+  --radius: 0.75rem;
 }
 
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
+    font-family: var(--font-figtree), system-ui, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-syne), system-ui, sans-serif;
   }
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-syne), system-ui, sans-serif;
+  }
+
   .container {
-    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-7xl;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    @media (min-width: 640px) {
+      max-width: 640px;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    @media (min-width: 768px) {
+      max-width: 768px;
+    }
+    @media (min-width: 1024px) {
+      max-width: 1024px;
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+    @media (min-width: 1280px) {
+      max-width: 1400px;
+    }
+  }
+
+  .tracking-editorial {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.3);
   }
 }
