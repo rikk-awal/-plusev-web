@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Syne, Figtree, JetBrains_Mono } from "next/font/google";
+import { Syne, Figtree, JetBrains_Mono, Instrument_Serif, Titillium_Web } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
@@ -26,6 +26,19 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400"],
+});
+
+const titilliumWeb = Titillium_Web({
+  variable: "--font-titillium",
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -105,7 +118,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${syne.variable} ${figtree.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${syne.variable} ${figtree.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable} ${titilliumWeb.variable} antialiased`}>
         <ClarityInit />
         <script
           type="application/ld+json"
