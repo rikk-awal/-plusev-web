@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { GenerativeArtScene } from "../components/GenerativeArtScene";
 
 // ─── THE AUTOPSY: 13 real disease detectors (D1–D13) ────────────────────────
 const DISEASES = [
@@ -44,7 +45,7 @@ const TRADE_LINE = "10,67.6 17.5,65 25,61.2 32.5,58.8 40,56.3 47.5,53.5 55,52 62
 
 function RadarDiagram() {
   return (
-    <svg viewBox="0 0 200 200" className="w-full h-full" role="img" aria-label="Radar chart showing five weighted scoring factors converging to a grade">
+    <svg viewBox="-50 0 300 200" className="w-full h-full" role="img" aria-label="Radar chart showing five weighted scoring factors converging to a grade">
       <polygon points={RADAR_OUTER} fill="none" stroke="#02263c" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="2 3" />
       <polygon points={RADAR_SCORE} fill="#1d4ed8" fillOpacity="0.15" stroke="#1d4ed8" strokeWidth="1.5" />
       {RADAR_OUTER.split(" ").map((pt, i) => {
@@ -154,26 +155,71 @@ export default function Platform() {
       <SiteHeader />
 
       {/* ─── HERO — same full-bleed photo treatment as the homepage ────────── */}
-      <section className="section-hero min-h-[394px] pt-[135px] pb-[70px]">
-        <div className="section-hero__img" style={{ backgroundImage: `url('/images/quant_hero_bg.png')` }} />
+      <section className="section-hero min-h-[376px] md:min-h-[400px] lg:min-h-[425px] pt-[110px] md:pt-[135px] pb-[70px]">
+        <div
+          className="section-hero__img"
+          style={{ backgroundImage: `url('/images/quant_hero_bg.png')`, transform: "scaleX(-1)" }}
+        />
+
+        {/* Signature moment, mirrored from the homepage — text sits left here, so the equity
+            traces + glow orbs sit right instead of left (background photo is flipped to match) */}
+        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+          <GenerativeArtScene />
+        </div>
+
+        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+          <div
+            className="absolute rounded-full w-[140px] h-[140px] md:w-[280px] md:h-[280px]"
+            style={{
+              left: "16%",
+              top: "8%",
+              background:
+                "radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(56,189,248,0) 70%)",
+              filter: "blur(30px)",
+            }}
+          />
+          <div
+            className="absolute rounded-full w-[95px] h-[95px] md:w-[190px] md:h-[190px]"
+            style={{
+              left: "10%",
+              top: "38%",
+              background:
+                "radial-gradient(circle, rgba(29,78,216,0.2) 0%, rgba(29,78,216,0) 70%)",
+              filter: "blur(18px)",
+            }}
+          />
+          <div
+            className="absolute rounded-full w-[65px] h-[65px] md:w-[130px] md:h-[130px]"
+            style={{
+              left: "15%",
+              top: "55%",
+              background:
+                "radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(56,189,248,0) 70%)",
+              filter: "blur(9px)",
+            }}
+          />
+        </div>
+
         <div className="section-hero__overlay" />
-        <div className="container max-w-5xl mx-auto px-6 relative z-10">
+        <div className="container max-w-5xl mx-auto px-6 relative z-10 -mt-[20px] md:-mt-[32px]">
           <motion.h1
             initial={prefersReducedMotion ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             className="section-hero__title-line max-w-2xl"
           >
-            From hypothesis to production, provably.
+            We test every trading idea.
+            <br />
+            Most don&apos;t survive.
           </motion.h1>
           <motion.p
             initial={prefersReducedMotion ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white/75 max-w-xl mt-4"
+            className="text-white max-w-xl mt-4"
             style={{ fontSize: "clamp(0.9rem, 1.4vw, 1.05rem)" }}
           >
-            Every strategy earns its way through a validation pipeline before it risks a rupee of real capital.
+            PlusEV&apos;s proprietary research process is helping to transform systematic trading by putting each one through checks and balances at every step, so only what earns its way through goes live with real capital.
           </motion.p>
         </div>
       </section>
@@ -181,30 +227,39 @@ export default function Platform() {
       {/* ─── OPPORTUNITY FOR IMPACT — two text columns, pull-quote + copy ──── */}
       <section className="pt-[15px] pb-[80px]">
         <div className="container max-w-5xl mx-auto px-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#02263c]/40 mb-6">
-            The problem
-          </p>
+          <h2 className="section-image-with-text__title !text-[clamp(1.6rem,3vw,2.2rem)] mb-6">
+            Opportunity for impact
+          </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-6">
             <motion.p
               initial={prefersReducedMotion ? false : { opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="font-display text-[#1d4ed8] font-medium"
+              className="font-display text-[#1d4ed8]"
               style={{ fontSize: "clamp(1.3rem, 2.4vw, 1.8rem)", lineHeight: 1.4 }}
             >
-              Most edges are noise wearing a backtest — and a backtest passing is not proof of anything.
+              Our platform has the transformational potential to increase access to AI-native, institutional-grade validation, and replace discretionary conviction with systematic, evidence-based decisions.
             </motion.p>
-            <motion.p
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="text-[#555555]"
-              style={{ fontSize: "1rem", lineHeight: 1.7 }}
-            >
-              A strategy that looks good on five years of history can still be curve-fit to the exact data it was tested on. PlusEV treats every hypothesis as guilty until proven otherwise: of roughly 1,240 ideas that enter the pipeline in a research cycle, one survives to production.
-            </motion.p>
+            <div>
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: 120 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="h-[3px] bg-gradient-to-r from-[#38bdf8] to-[#1d4ed8]/10 rounded-[2px] mb-4"
+              />
+              <motion.p
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.15 }}
+                className="text-[#555555]"
+                style={{ fontSize: "1rem", lineHeight: 1.7 }}
+              >
+                We see significant opportunity to broaden the range of traders benefiting from validated strategies, each one proven against data it was never tuned on before capital is committed.
+              </motion.p>
+            </div>
           </div>
         </div>
       </section>
