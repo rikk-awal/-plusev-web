@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Syne, Figtree, JetBrains_Mono, Instrument_Serif, Titillium_Web } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
@@ -88,6 +88,10 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   icons: { icon: "/favicon.ico" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#02263c",
 };
 
 const organizationJsonLd = {
