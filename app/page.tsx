@@ -273,7 +273,7 @@ export default function Home() {
 
         <div className="section-hero__overlay" />
 
-        <div className="w-full px-6 md:px-10 relative z-10 -mt-[10px] md:-mt-[41px]">
+        <div className="w-full px-6 md:px-10 relative z-10 -mt-[38px] md:-mt-[41px]">
           <div className="max-w-7xl ml-auto flex justify-start md:justify-end">
             <motion.p
               initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
