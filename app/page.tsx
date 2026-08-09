@@ -288,6 +288,7 @@ export default function Home() {
               <span
                 style={{
                   fontSize: "clamp(0.81rem, 1.57vw, 1.34rem)",
+                  lineHeight: 1.4,
                   letterSpacing: "normal",
                   whiteSpace: "normal",
                 }}
@@ -327,7 +328,7 @@ export default function Home() {
               className="relative z-10"
             >
               <h3 className="section-image-with-text__subtitle">
-                Building systematic trading strategies through data mining,
+                Building a systematic research pipeline through data mining,
                 hypothesis generation, backtesting, trade autopsy, edge
                 extraction, signal isolation & production deployment.
               </h3>
