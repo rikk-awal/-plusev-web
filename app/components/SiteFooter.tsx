@@ -66,7 +66,7 @@ export function SiteFooter() {
           {/* Newsletter signup */}
           <div className="w-full max-w-xs order-1 md:order-2">
             <p className="text-sm font-medium text-[#02263c] mb-2">
-              Sign up for research updates from PlusEV
+              Sign up for updates from PlusEV
             </p>
             {status === "success" ? (
               <p className="text-sm text-[#1d4ed8]">Thanks, we&apos;ve received your email.</p>
