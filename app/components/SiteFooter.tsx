@@ -1,8 +1,43 @@
+"use client";
+
+import { useState } from "react";
+
+type Status = "idle" | "loading" | "success" | "error";
+
 export function SiteFooter() {
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState(""); // honeypot — real visitors never fill this
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setError("");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, company }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setError("Something went wrong. Please try again.");
+      setStatus("error");
+    }
+  };
+
   return (
     <footer className="site-footer">
       <div className="container max-w-5xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
 
           {/* Logo & Copy */}
           <div className="space-y-3">
@@ -26,6 +61,51 @@ export function SiteFooter() {
               <a href="#" className="hover:text-[#38bdf8] transition-colors">Terms &amp; Conditions</a>
             </div>
             <p className="text-xs text-[#02263c]/50">© PlusEV 2020-2026. All Rights Reserved.</p>
+          </div>
+
+          {/* Newsletter signup */}
+          <div className="w-full max-w-xs">
+            <p className="text-sm font-medium text-[#02263c] mb-2">
+              Sign up for the latest from PLUSEV AI
+            </p>
+            {status === "success" ? (
+              <p className="text-sm text-[#1d4ed8]">Thanks, we&apos;ve received your email.</p>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Email*"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={status === "loading"}
+                    className="flex-1 min-w-0 border border-black/15 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#38bdf8]"
+                  />
+                  {/* Honeypot: hidden from sighted users, invisible to screen readers, bots fill it anyway */}
+                  <input
+                    type="text"
+                    name="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="hidden"
+                  />
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="btn !py-2 !px-4 !text-sm whitespace-nowrap"
+                  >
+                    {status === "loading" ? "Submitting…" : "Submit"}
+                  </button>
+                </div>
+                {status === "error" && (
+                  <p className="text-xs text-red-600">{error}</p>
+                )}
+              </form>
+            )}
           </div>
 
           {/* Contact action & LinkedIn */}
