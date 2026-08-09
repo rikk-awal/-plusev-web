@@ -159,7 +159,7 @@ export function SiteHeader() {
 
             <div className="border-t border-white/15 pt-6 relative z-10">
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/plusev-ai-quant-trading-pvt-ltd/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-10 h-10 opacity-90 hover:opacity-100 transition-opacity"

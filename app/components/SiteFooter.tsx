@@ -40,7 +40,7 @@ export function SiteFooter() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
 
           {/* Logo & Copy */}
-          <div className="space-y-3">
+          <div className="space-y-3 order-3 md:order-1">
             <a href="/" className="block w-fit">
               <svg
                 width="139"
@@ -64,7 +64,7 @@ export function SiteFooter() {
           </div>
 
           {/* Newsletter signup */}
-          <div className="w-full max-w-xs">
+          <div className="w-full max-w-xs order-1 md:order-2">
             <p className="text-sm font-medium text-[#02263c] mb-2">
               Sign up for the latest from PLUSEV AI
             </p>
@@ -109,7 +109,7 @@ export function SiteFooter() {
           </div>
 
           {/* Contact action & LinkedIn */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 order-2 md:order-3">
             <a
               href="/contact"
               className="btn !py-2.5 !px-6"
@@ -117,7 +117,7 @@ export function SiteFooter() {
               Contact us
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/plusev-ai-quant-trading-pvt-ltd/"
               target="_blank"
               rel="noopener noreferrer"
               className="opacity-80 hover:opacity-100 transition-opacity"
