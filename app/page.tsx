@@ -6,52 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { GenerativeArtScene } from "./components/GenerativeArtScene";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
-
-// ─── CTA WATERMARK SVG (QUANT GRID CONTOUR THEME) ───────────────────────────
-function CtaWatermark() {
-  return (
-    <svg
-      className="w-full h-full text-[#1d4ed8]/10"
-      viewBox="0 0 200 200"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M10 80 C 40 100, 60 70, 100 120 C 140 170, 160 110, 190 130"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      />
-      <path
-        d="M10 110 C 50 140, 80 90, 110 150 C 140 210, 170 130, 190 160"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      />
-      <path
-        d="M10 50 C 30 70, 50 40, 80 90 C 110 140, 140 80, 190 100"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      />
-      <line
-        x1="100"
-        y1="0"
-        x2="100"
-        y2="200"
-        stroke="currentColor"
-        strokeWidth="0.25"
-        strokeDasharray="4 4"
-      />
-      <line
-        x1="0"
-        y1="100"
-        x2="200"
-        y2="100"
-        stroke="currentColor"
-        strokeWidth="0.25"
-        strokeDasharray="4 4"
-      />
-    </svg>
-  );
-}
+import { CtaWatermark } from "./components/CtaWatermark";
 
 // ─── FUNNEL (the real 9-stage research pipeline, shown as attrition — most ideas die) ────
 const FUNNEL_STAGES = [
@@ -85,18 +40,25 @@ function FunnelStage({
   isLast: boolean;
 }) {
   const barX = 120 - width / 2;
+  // Three visual states: skeleton (faint full-width outline + placeholder digits,
+  // the visible "before" the sweep resolves FROM), mid-countdown, and settled —
+  // the latter two share the solid style; only displayCount differs between them.
   return (
     <g>
       <rect
         x={barX}
         y={y}
-        width={revealed ? width : 0}
+        width={width}
         height={height}
         fill="#1d4ed8"
-        fillOpacity={isLast ? 0.9 : 0.18}
+        fillOpacity={revealed ? (isLast ? 0.9 : 0.18) : 0.04}
         stroke="#1d4ed8"
+        strokeOpacity={revealed ? 1 : 0.25}
         strokeWidth={isLast ? 1.5 : 1}
-        style={{ transition: "width 0.35s ease-out" }}
+        style={{
+          transition:
+            "fill-opacity 0.35s ease-out, stroke-opacity 0.35s ease-out",
+        }}
       >
         <title>{FUNNEL_STAGES[index].label}</title>
       </rect>
@@ -106,9 +68,10 @@ function FunnelStage({
         fontSize="8"
         fontFamily="monospace"
         fill="#02263c"
-        fillOpacity={0.75}
+        fillOpacity={revealed ? 0.75 : 0.3}
+        style={{ transition: "fill-opacity 0.35s ease-out" }}
       >
-        {displayCount.toLocaleString()}
+        {revealed ? displayCount.toLocaleString() : "———"}
       </text>
       {isLast && (
         <g stroke="#38bdf8">
@@ -141,7 +104,6 @@ export default function Home() {
     FUNNEL_STAGES.map((s) => s.count),
   );
   const funnelTimeouts = useRef<number[]>([]);
-  const hasFunnelRevealed = useRef(false);
 
   // Counts down toward the real survivor count for one stage — early ticks are a
   // plausible-looking higher number, later ticks converge and decelerate into the answer.
@@ -149,8 +111,8 @@ export default function Home() {
     index: number,
     finalValue: number,
     startDelaySeconds: number,
+    totalTicks: number,
   ) => {
-    const totalTicks = 6;
     const runTick = (tick: number) => {
       if (tick === 0) {
         setFunnelRevealed((prev) =>
@@ -185,8 +147,12 @@ export default function Home() {
     );
   };
 
-  // Walks the funnel top to bottom — first triggered on scroll into view, replayable on hover.
-  const runFunnelSweep = () => {
+  // Walks the funnel top to bottom — triggered every time it scrolls into view, replayable on hover.
+  // Scroll path: skeleton is already visible (unrevealed stages render as faint full-width
+  // outlines), so hold ~400ms on it before sweeping, then sweep slower (~3-3.5s total) since
+  // the viewer's attention is still arriving. Hover path: viewer is already engaged — no
+  // pre-hold, original fast timing, unchanged from before.
+  const runFunnelSweep = (trigger: "scroll" | "hover") => {
     funnelTimeouts.current.forEach((id) => window.clearTimeout(id));
     funnelTimeouts.current = [];
 
@@ -197,24 +163,62 @@ export default function Home() {
     }
 
     setFunnelRevealed(Array(9).fill(false));
-    const stepDelay = 0.18;
+    const isScroll = trigger === "scroll";
+    const preHoldSeconds = isScroll ? 0.4 : 0;
+    const stepDelay = isScroll ? 0.25 : 0.18;
+    const totalTicks = isScroll ? 8 : 6;
     FUNNEL_STAGES.forEach((stage, i) =>
-      runFunnelStageCountdown(i, stage.count, i * stepDelay),
+      runFunnelStageCountdown(
+        i,
+        stage.count,
+        preHoldSeconds + i * stepDelay,
+        totalTicks,
+      ),
     );
   };
 
-  const handleFunnelFirstReveal = () => {
-    if (hasFunnelRevealed.current) return;
-    hasFunnelRevealed.current = true;
-    runFunnelSweep();
+  // Fires on every viewport entry (viewport.once is false on the funnel wrappers), so
+  // scrolling away and back replays the full scroll-style reveal each time.
+  const handleFunnelViewportEnter = () => {
+    runFunnelSweep("scroll");
   };
 
+  // No "has the reveal happened yet" guard needed: hover is only physically possible on a
+  // visible element, and viewport-enter (no longer once-gated) has already fired by then.
   const handleFunnelHover = () => {
-    if (!hasFunnelRevealed.current) return;
-    runFunnelSweep();
+    runFunnelSweep("hover");
   };
 
   const funnelBarWidths = FUNNEL_STAGES.map((_, i) => 160 - i * 17.5);
+
+  // Framer's whileInView/onViewportEnter only reliably fires re-entry through the same
+  // edge the element first entered from (e.g. scroll down past it, then scroll back up —
+  // re-entering through the top edge — doesn't retrigger). A plain IntersectionObserver
+  // fires on every false→true transition regardless of which edge, so it replays correctly
+  // no matter how the viewer scrolls back to it.
+  const funnelRefDesktop = useRef<SVGGElement | null>(null);
+  const funnelRefMobile = useRef<SVGGElement | null>(null);
+
+  useEffect(() => {
+    const targets = [funnelRefDesktop.current, funnelRefMobile.current].filter(
+      (el): el is SVGGElement => el !== null,
+    );
+    if (targets.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            handleFunnelViewportEnter();
+          }
+        });
+      },
+      { threshold: 0 },
+    );
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-white text-[#02263c] overflow-x-hidden selection:bg-[#38bdf8]/20">
@@ -279,7 +283,7 @@ export default function Home() {
               }
               className="section-hero__title-line text-left md:text-right"
             >
-              Developing positive-expectancy trading&nbsp;infrastructure.
+              Developing positive-expectancy trading&nbsp;infrastructure
               <br />
               <span
                 style={{
@@ -288,7 +292,7 @@ export default function Home() {
                   whiteSpace: "normal",
                 }}
               >
-                We are engineers, traders & researchers in financial markets.
+                We are engineers, traders & AI researchers in financial markets.
               </span>
             </motion.p>
           </div>
@@ -310,7 +314,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="section-image-with-text__title mb-10"
           >
-            Quantitative trading infrastructure.
+            Quantitative trading infrastructure
           </motion.h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 items-start">
@@ -323,9 +327,9 @@ export default function Home() {
               className="relative z-10"
             >
               <h3 className="section-image-with-text__subtitle">
-                Building systematic trading strategies through hypothesis
-                generation, backtesting, trade autopsy, edge extraction, signal
-                isolation, forward testing & production deployment.
+                Building systematic trading strategies through data mining,
+                hypothesis generation, backtesting, trade autopsy, edge
+                extraction, signal isolation & production deployment.
               </h3>
 
               {/* Visual: contour backdrop + dotted frame + floating node, stacked under the title/subtitle like Aktis's left column. Desktop only — mobile gets its own copy positioned after the Platform/Contact row, matching Aktis's mobile flow. */}
@@ -342,10 +346,10 @@ export default function Home() {
                   aria-label="Wireframe illustration of a funnel showing hypotheses narrowing at each research stage down to one production strategy"
                 >
                   <motion.g
+                    ref={funnelRefDesktop}
                     initial={prefersReducedMotion ? false : { opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    onViewportEnter={handleFunnelFirstReveal}
+                    viewport={{ once: false }}
                     onMouseEnter={handleFunnelHover}
                     transition={{ duration: 0.5 }}
                   >
@@ -385,17 +389,16 @@ export default function Home() {
 
               <div className="section-image-with-text__description">
                 <p>
-                  PlusEV is committed to making institutional-grade quantitative
-                  trading technology accessible and affordable through AI-native
-                  trading infrastructure built specifically for Indian markets,
-                  with global markets on the roadmap.
+                  PlusEV engineers AI-native trading infrastructure for Indian
+                  markets, with global markets on the roadmap.{" "}
+                  <strong className="font-semibold">Our mission</strong> is to
+                  make institutional-grade quantitative trading technology
+                  accessible and affordable.
                 </p>
                 <p>
-                  We have built a proprietary platform that integrates
-                  BacktestIQ, SignalAI, TradeAnalyzer, and StrategyLive to
-                  continuously compute probability density and expectancy to
-                  capture micro-structure anomalies, ensuring automated
-                  execution with real-time risk filters and fail-safes.
+                  We have built a proprietary platform that computes
+                  probability density and expectancy to capture market
+                  micro-structure imbalances.
                 </p>
               </div>
 
@@ -403,7 +406,7 @@ export default function Home() {
                 <a href="/platform" className="btn">
                   Platform
                 </a>
-                <a href="/#contact" className="btn">
+                <a href="/contact" className="btn">
                   Contact
                 </a>
               </div>
@@ -420,10 +423,10 @@ export default function Home() {
                   aria-label="Wireframe illustration of a funnel showing hypotheses narrowing at each research stage down to one production strategy"
                 >
                   <motion.g
+                    ref={funnelRefMobile}
                     initial={prefersReducedMotion ? false : { opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    onViewportEnter={handleFunnelFirstReveal}
+                    viewport={{ once: false }}
                     onMouseEnter={handleFunnelHover}
                     transition={{ duration: 0.5 }}
                   >
@@ -475,16 +478,16 @@ export default function Home() {
                 <a
                   href="mailto:plusev.blr@gmail.com"
                   className="btn"
-                  style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
+                  style={{ fontSize: "clamp(1.8rem, 3.4vw, 2.55rem)" }}
                 >
-                  Let's talk.
+                  Let's talk
                 </a>
               </h2>
 
               <h3 className="section-cta__subtitle mt-2">
-                We are a small team of engineers, traders & researchers figuring
-                this out from first principles. If that sounds interesting, we'd
-                love to hear from you.
+                We are a small team that tests every idea before trusting
+                it. If that sounds interesting, we would love to hear from
+                you.
               </h3>
             </motion.div>
           </div>
