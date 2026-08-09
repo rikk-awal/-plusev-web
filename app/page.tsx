@@ -283,7 +283,7 @@ export default function Home() {
               }
               className="section-hero__title-line text-left md:text-right"
             >
-              Developing positive-expectancy trading&nbsp;infrastructure
+              Developing positive&#8209;expectancy trading&nbsp;infrastructure
               <br />
               <span
                 style={{

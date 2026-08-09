@@ -279,6 +279,30 @@ body {
     height: 52px;
   }
 
+  /* Mobile/tablet: land already at the compact size instead of the desktop-scale
+     185x74 default, so scroll only nudges it slightly smaller rather than visibly
+     "resizing" on the first scroll. */
+  @media only screen and (max-width: 1169px) {
+    .site-header {
+      padding-top: 6px;
+    }
+
+    .site-header__logo {
+      width: 130px;
+      height: 52px;
+    }
+
+    .site-header.scrolled {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .site-header.scrolled .site-header__logo {
+      width: 120px;
+      height: 48px;
+    }
+  }
+
   .site-header .logo {
     width: 163px;
   }
@@ -469,7 +493,7 @@ body {
     font-weight: 400;
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 7.8vw, 2rem);
-    line-height: 1.25;
+    line-height: 1.8;
     letter-spacing: -0.01em;
   }
 

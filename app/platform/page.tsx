@@ -565,15 +565,15 @@ export default function Platform() {
             <p className="font-mono text-[10px] uppercase tracking-wider text-[#02263c]/40 mb-3">
               5 of 14 are gate-critical.
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
               {DISEASES.map((d) => (
                 <span
                   key={d.code}
                   title={d.name}
                   className={
                     d.code === "D1"
-                      ? "font-mono text-[10px] uppercase tracking-wider text-[#1d4ed8] border border-[#1d4ed8]/40 rounded-full px-3 py-1"
-                      : "font-mono text-[10px] uppercase tracking-wider text-[#02263c]/50 border border-black/10 rounded-full px-3 py-1"
+                      ? "font-mono text-[9px] md:text-[10px] uppercase tracking-normal md:tracking-wider text-[#1d4ed8] border border-[#1d4ed8]/40 rounded-full px-2 py-0.5 md:px-3 md:py-1"
+                      : "font-mono text-[9px] md:text-[10px] uppercase tracking-normal md:tracking-wider text-[#02263c]/50 border border-black/10 rounded-full px-2 py-0.5 md:px-3 md:py-1"
                   }
                 >
                   {d.code} · {d.name}
