@@ -109,7 +109,7 @@ export function SiteFooter() {
           </div>
 
           {/* Contact action & LinkedIn */}
-          <div className="flex items-center gap-6 order-2 md:order-3">
+          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:gap-6 order-2 md:order-3">
             <a
               href="/contact"
               className="btn !py-2.5 !px-6"
