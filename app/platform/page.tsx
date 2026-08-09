@@ -358,7 +358,7 @@ export default function Platform() {
             className="text-white max-w-xl mt-4"
             style={{ fontSize: "clamp(0.9rem, 1.4vw, 1.05rem)" }}
           >
-            PlusEV&apos;s proprietary research process is helping to transform systematic trading by putting each one through checks and balances at every step, so&nbsp;only what survives reaches live execution.
+            PlusEV&apos;s proprietary research pipeline puts each hypothesis through checks and balances at every step, so&nbsp;only what survives reaches live execution.
           </motion.p>
         </div>
       </section>
