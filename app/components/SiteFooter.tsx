@@ -41,7 +41,7 @@ export function SiteFooter() {
 
           {/* Logo & Copy */}
           <div className="space-y-3 order-3 md:order-1">
-            <a href="/" className="block w-fit">
+            <a href="/" className="block w-fit -ml-[3px]">
               <svg
                 width="139"
                 height="56"
