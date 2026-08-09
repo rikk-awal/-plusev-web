@@ -540,7 +540,7 @@ export default function Platform() {
               </h2>
               <div className="h-[3px] w-[120px] bg-gradient-to-r from-[#38bdf8] to-[#1d4ed8]/10 rounded-[2px] mb-6" />
               <p className="text-[#02263c] text-[0.95rem] leading-[1.7]">
-                Trade autopsy checks every closed trade against 14 known failure modes, so a loss comes back with a cause attached rather than a number. No trade closes without an explanation. The trade shown here was flagged for market state mismatch: the edge was validated in one market state and the trade was taken in another. Some failure modes are more than a note in the log: trigger one, and the strategy is blocked from going live until it&apos;s fixed.
+                Trade autopsy checks every closed trade against 14 known failure modes, so a loss comes back with a cause attached rather than a number. No trade closes without an explanation. This example was flagged for market state mismatch: the edge was validated in one market state and executed in another. Some failure modes are more than a note in the log: trigger one, and the strategy is blocked from going live until it&apos;s fixed.
               </p>
             </motion.div>
 
@@ -565,7 +565,7 @@ export default function Platform() {
             <p className="font-mono text-[10px] uppercase tracking-wider text-[#02263c]/40 mb-3">
               5 of 14 are gate-critical.
             </p>
-            <div className="flex flex-wrap gap-1.5 md:gap-2">
+            <div className="grid grid-cols-2 justify-items-start gap-1.5 md:flex md:flex-wrap md:gap-2">
               {DISEASES.map((d) => (
                 <span
                   key={d.code}
