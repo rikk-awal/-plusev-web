@@ -287,6 +287,7 @@ export default function Home() {
               <br />
               <span
                 style={{
+                  display: "block",
                   fontSize: "clamp(0.81rem, 1.57vw, 1.34rem)",
                   lineHeight: 1.4,
                   letterSpacing: "normal",
