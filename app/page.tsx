@@ -307,13 +307,13 @@ export default function Home() {
 
       {/* ─── SECTION 1: ONE SYSTEM. FOUR INSTRUMENTS ──────────────────────────── */}
       <section id="platform" className="section-image-with-text">
-        <div className="container max-w-5xl mx-auto px-6 -mt-[10px] md:-mt-[57px]">
+        <div className="container max-w-5xl mx-auto px-6 -mt-[35px] md:-mt-[57px]">
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="section-image-with-text__title mb-10"
+            className="section-image-with-text__title mb-10 !text-[clamp(1.5rem,6vw,2.55rem)]"
           >
             Quantitative trading infrastructure
           </motion.h2>
