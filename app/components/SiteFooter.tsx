@@ -80,7 +80,7 @@ export function SiteFooter() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={status === "loading"}
-                    className="flex-1 min-w-0 border border-black/15 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#38bdf8]"
+                    className="flex-1 min-w-0 border border-black/15 px-3 py-2 text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-[#38bdf8]"
                   />
                   {/* Honeypot: hidden from sighted users, invisible to screen readers, bots fill it anyway */}
                   <input
