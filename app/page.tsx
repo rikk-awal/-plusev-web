@@ -306,7 +306,7 @@ export default function Home() {
 
       {/* ─── SECTION 1: ONE SYSTEM. FOUR INSTRUMENTS ──────────────────────────── */}
       <section id="platform" className="section-image-with-text">
-        <div className="container max-w-5xl mx-auto px-6 -mt-[57px]">
+        <div className="container max-w-5xl mx-auto px-6 -mt-[10px] md:-mt-[57px]">
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}

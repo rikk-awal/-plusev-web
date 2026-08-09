@@ -18,11 +18,12 @@ export function SiteHeader() {
   return (
     <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
       <div className="mx-auto max-w-[1900px] px-6 md:px-10 lg:px-[120px]">
-        <div className="flex justify-between items-center h-[85px]">
+        <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="relative z-50">
             <a href="/" className="block">
               <svg
+                className="site-header__logo"
                 width="185"
                 height="74"
                 viewBox="0 0 185 74"

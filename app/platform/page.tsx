@@ -74,7 +74,7 @@ function LedgerRecord({ active, prefersReducedMotion }: { active: boolean; prefe
   const skip = !!prefersReducedMotion;
   return (
     <svg viewBox="0 0 200 140" className="w-full h-auto" role="img" aria-label="A dense ledger of hypotheses, nearly all struck through as dead, one left open and on record">
-      <motion.g key={active} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
+      <motion.g key={String(active)} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
         {LEDGER_ROWS.map((r, i) => {
           if (i === LEDGER_ALIVE_IDX) return null;
           return (
@@ -133,7 +133,7 @@ function ControlGap({ active, prefersReducedMotion }: { active: boolean; prefers
           <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.04" />
         </linearGradient>
       </defs>
-      <motion.g key={active} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
+      <motion.g key={String(active)} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
         {CONTROL_PATHS.map((p, i) => (
           <polyline key={i} points={p} fill="none" stroke="#02263c" strokeOpacity="0.06" strokeWidth="0.5" />
         ))}
@@ -182,7 +182,7 @@ function RisingBar({ active, prefersReducedMotion }: { active: boolean; prefersR
   const lastStep = BAR_STEPS[BAR_STEPS.length - 1];
   return (
     <svg viewBox="0 0 200 140" className="w-full h-auto" role="img" aria-label="A field of failed attempts beneath a rising staircase of thresholds, with one attempt shown clearing the final threshold. Each survivor becomes the bar the next attempt has to clear">
-      <motion.g key={active} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
+      <motion.g key={String(active)} initial={skip ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.3 }}>
         <line x1="6" y1="132" x2="196" y2="132" stroke="#02263c" strokeOpacity="0.18" strokeWidth="1" />
         {BAR_SCATTER.map((p, i) => (
           <circle key={i} cx={p.x} cy={p.y} r="1.1" fill="#02263c" fillOpacity="0.1" />
@@ -407,7 +407,7 @@ export default function Platform() {
       </section>
 
       {/* ─── OPPORTUNITY FOR IMPACT — two text columns, pull-quote + copy ──── */}
-      <section className="pt-[15px] pb-[80px]">
+      <section className="pt-[15px] pb-[30px] md:pb-[60px]">
         <div className="container max-w-5xl mx-auto px-6">
           <h2 className="section-image-with-text__title !text-[clamp(1.6rem,3vw,2.2rem)] mb-6">
             Opportunity for impact
@@ -594,7 +594,7 @@ export default function Platform() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="w-full max-w-sm mx-auto"
+              className="w-full max-w-sm mx-auto order-2 lg:order-1"
             >
               <EdgeCapture />
             </motion.div>
@@ -604,6 +604,7 @@ export default function Platform() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.15 }}
+              className="order-1 lg:order-2"
             >
               <h2 className="section-image-with-text__title !text-[clamp(1.6rem,3vw,2.2rem)]">
                 Built for safer market participation
