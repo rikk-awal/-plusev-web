@@ -22,7 +22,11 @@ const DISEASES = [
   { code: "D11", name: "Sizing amplification" },
   { code: "D12", name: "Temporal decay" },
   { code: "D13", name: "Risk profile" },
-  { code: "D14", name: "Exit capture inefficiency" },
+  // "short" is a display-only abbreviation for the chip label (avoids a
+  // 2-line wrap that made the D13/D14 row look bloated) — the real full
+  // name still shows via the title tooltip. Chosen to not collide with
+  // D4's "Exit inefficiency".
+  { code: "D14", name: "Exit capture inefficiency", short: "Capture inefficiency" },
 ];
 
 // ─── Carousel: three panels of one research loop, drawn as one matched set
@@ -253,53 +257,6 @@ function ChevronIcon({ direction }: { direction: "left" | "right" }) {
   return (
     <svg viewBox="0 0 90 100" className="w-full h-full">
       <polyline points={points} fill="none" stroke="currentColor" strokeWidth="13" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-// A row of marks fading from solid to invisible, left to right — the edge
-// decaying with time, exactly as the body copy says. One mark, still clearly
-// alive, gets caught by a bracket and carried on solid instead of fading with
-// the rest. Opacity is the only variable (never height/size — the moment
-// this becomes a bar chart it re-imports the chart-literacy problem that
-// forced two other illustrations on this page to be rebuilt from scratch).
-// First pass shipped with no text and didn't land — a fading row alone reads
-// as a generic gradient, not "an edge decaying." Fixed the same way
-// DiagnosisScan was fixed: real words carry the story, not just geometry.
-const EDGE_ROW_COUNT = 20;
-const EDGE_CAPTURE_INDEX = 8;
-
-function EdgeCapture() {
-  const squares = Array.from({ length: EDGE_ROW_COUNT }, (_, i) => {
-    const x = 8 + i * 9.2;
-    const base = 1 - (i / (EDGE_ROW_COUNT - 1)) * 0.93;
-    const j = jitter(i * 5.7);
-    const opacity = Math.max(0.04, Math.min(1, base + (j - 0.5) * 0.06));
-    return { x, opacity };
-  });
-  const cap = squares[EDGE_CAPTURE_INDEX];
-
-  return (
-    <svg viewBox="0 0 200 110" className="w-full h-auto" role="img" aria-label="A row of marks fading from solid to invisible, left to right, labeled 'edge found' at the start and 'missed' at the end. One mark, still clearly visible, is labeled 'caught' and carried forward solid instead of fading with the rest">
-      <text x="8" y="14" fontSize="6.5" fontFamily="monospace" fill="#02263c" fillOpacity="0.45" fontWeight="bold">EDGE FOUND</text>
-
-      {squares.map((s, i) =>
-        i === EDGE_CAPTURE_INDEX ? null : (
-          <rect key={i} x={s.x} y="47" width="7" height="7" fill="#02263c" fillOpacity={s.opacity} />
-        )
-      )}
-
-      <g stroke="#16a34a" strokeWidth="1.5" fill="none" strokeLinecap="round">
-        <path d={`M ${cap.x - 4} 34 h ${7 + 8} M ${cap.x - 4} 34 v 5 M ${cap.x + 11} 34 v 5`} />
-        <path d={`M ${cap.x - 4} 64 h ${7 + 8} M ${cap.x - 4} 64 v -5 M ${cap.x + 11} 64 v -5`} />
-      </g>
-      <rect x={cap.x} y="47" width="7" height="7" fill="#16a34a" />
-
-      <line x1={cap.x + 7} y1="50" x2={cap.x + 34} y2="40" stroke="#16a34a" strokeWidth="1.5" />
-      <circle cx={cap.x + 34} cy="40" r="3" fill="#16a34a" />
-      <text x={cap.x + 40} y="42.5" fontSize="7" fontFamily="monospace" fill="#16a34a" fontWeight="bold">CAUGHT</text>
-
-      <text x="130" y="80" fontSize="6.5" fontFamily="monospace" fill="#02263c" fillOpacity="0.3" fontWeight="bold">MISSED</text>
     </svg>
   );
 }
@@ -565,18 +522,18 @@ export default function Platform() {
             <p className="font-mono text-[10px] uppercase tracking-wider text-[#02263c]/40 mb-3">
               5 of 14 are gate-critical.
             </p>
-            <div className="grid grid-cols-2 justify-items-start gap-1.5 md:flex md:flex-wrap md:gap-2">
+            <div className="grid grid-cols-2 justify-items-start gap-1 min-[1170px]:flex min-[1170px]:flex-wrap min-[1170px]:gap-2">
               {DISEASES.map((d) => (
                 <span
                   key={d.code}
                   title={d.name}
                   className={
                     d.code === "D1"
-                      ? "font-mono text-[9px] md:text-[10px] uppercase tracking-normal md:tracking-wider text-[#1d4ed8] border border-[#1d4ed8]/40 rounded-full px-2 py-0.5 md:px-3 md:py-1"
-                      : "font-mono text-[9px] md:text-[10px] uppercase tracking-normal md:tracking-wider text-[#02263c]/50 border border-black/10 rounded-full px-2 py-0.5 md:px-3 md:py-1"
+                      ? "font-mono text-[8px] min-[1170px]:text-[10px] uppercase tracking-normal min-[1170px]:tracking-wider text-[#1d4ed8] border border-[#1d4ed8]/40 rounded-full px-1.5 py-0.5 min-[1170px]:px-3 min-[1170px]:py-1"
+                      : "font-mono text-[8px] min-[1170px]:text-[10px] uppercase tracking-normal min-[1170px]:tracking-wider text-[#02263c]/50 border border-black/10 rounded-full px-1.5 py-0.5 min-[1170px]:px-3 min-[1170px]:py-1"
                   }
                 >
-                  {d.code} · {d.name}
+                  {d.code} · {d.short ?? d.name}
                 </span>
               ))}
             </div>
@@ -584,37 +541,26 @@ export default function Platform() {
         </div>
       </section>
 
-      {/* ─── SAFER PARTICIPATION — edge-capture-diagram-left / text-right
-          (mirrors Aktis's "Scaling for the future": image-left / text-right) */}
+      {/* ─── SAFER PARTICIPATION — text-only closing statement, no illustration.
+          Cites SEBI by name, so it reads more credible plain than paired with
+          a stylized graphic; also the last content before the CTA. */}
       <section className="pb-[60px] border-t border-black/5 pt-[70px]">
         <div className="container max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="w-full max-w-sm mx-auto order-2 lg:order-1"
-            >
-              <EdgeCapture />
-            </motion.div>
-
-            <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="order-1 lg:order-2"
-            >
-              <h2 className="section-image-with-text__title !text-[clamp(1.6rem,3vw,2.2rem)]">
-                Built for safer market participation
-              </h2>
-              <div className="h-[3px] w-[120px] bg-gradient-to-r from-[#38bdf8] to-[#1d4ed8]/10 rounded-[2px] mb-6" />
-              <p className="text-[#02263c] text-[0.95rem] leading-[1.7]">
-                A validated edge decays. The probability that made it real in research may not hold by the time the trade reaches the market. PlusEV is infrastructure across the whole research-to-execution pipeline, built so nothing reaches the market unchecked. SEBI&apos;s algo framework runs on that same rule: investors get access only &quot;with requisite safeguards,&quot; never without them.
-              </p>
-            </motion.div>
-          </div>
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="max-w-2xl"
+          >
+            <h2 className="section-image-with-text__title !text-[clamp(1.6rem,3vw,2.2rem)]">
+              Built for safer market participation
+            </h2>
+            <div className="h-[3px] w-[120px] bg-gradient-to-r from-[#38bdf8] to-[#1d4ed8]/10 rounded-[2px] mb-6" />
+            <p className="text-[#02263c] text-[0.95rem] leading-[1.7]">
+              A validated edge decays. The probability that made it real in research may not hold by the time the trade reaches the market. PlusEV is infrastructure across the whole research-to-execution pipeline, built so nothing reaches the market unchecked. SEBI&apos;s algo framework runs on that same rule: investors get access only &quot;with requisite safeguards,&quot; never without them.
+            </p>
+          </motion.div>
         </div>
       </section>
 
