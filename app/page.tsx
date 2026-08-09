@@ -292,7 +292,7 @@ export default function Home() {
                   whiteSpace: "normal",
                 }}
               >
-                We are engineers, traders & AI researchers in financial markets.
+                We are engineers, traders & AI researchers in financial&nbsp;markets.
               </span>
             </motion.p>
           </div>
